@@ -1,2 +1,1 @@
-# Yii2-senior-seed
-Yii2 senior seed
+# yii2-api-admin-seed
