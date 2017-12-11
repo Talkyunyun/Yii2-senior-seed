@@ -19,11 +19,19 @@ function dd($data = []) {
 
 
 function appAlias() {
+    // 公共模块
     Yii::setAlias('@common', dirname(__DIR__));
+
+    // 后台
     Yii::setAlias('@backend', ROOT_PATH . '/backend');
+
+    // 前台
+    Yii::setAlias('@website', ROOT_PATH . '/website');
 
     // 客户端项目接口开发
     Yii::setAlias('@api', ROOT_PATH . '/api');
+
+    // 命令模式
     Yii::setAlias('@console', ROOT_PATH . '/console');
 
     // 小程序项目接口开发
