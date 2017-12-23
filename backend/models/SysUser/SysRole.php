@@ -1,17 +1,17 @@
 <?php
-namespace backend\models\AdminUser;
+namespace backend\models\SysUser;
 
 use yii\db\ActiveRecord;
 
 /**
- * Class Role 角色表
- * @package app\models\AdminUser
+ * Class SysRole 角色表
+ * @package app\models\SysUser
  * @property string $name 名称
  * @property int $status 状态值
  * @property string $remark 备注
  * @author Gene <https://github.com/Talkyunyun>
  */
-class Role extends ActiveRecord {
+class SysRole extends ActiveRecord {
     public static function tableName() {
         return 'sys_role';
     }
@@ -19,7 +19,8 @@ class Role extends ActiveRecord {
 
     public function rules() {
         return [
-            [['name'], 'required', 'message' => '{attribute}为必填字段']
+            [['name'], 'required', 'message' => '{attribute}为必填字段'],
+            ['status', 'in', 'range' => [1, 0], 'message' => '非法的状态值'],
         ];
     }
 

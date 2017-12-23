@@ -1,18 +1,18 @@
 <?php
-namespace backend\models\AdminUser;
+namespace backend\models\SysUser;
 
 use yii\db\ActiveRecord;
 
 /**
- * Class RoleUser 用户角色表
- * @package app\models\AdminUser
+ * Class SysUserRole 用户角色表
+ * @package app\models\SysUser
  * @property int $role_id 角色ID
  * @property int $user_id 用户UID
  * @author Gene <https://github.com/Talkyunyun>
  */
-class RoleUser extends ActiveRecord {
+class SysUserRole extends ActiveRecord {
     public static function tableName() {
-        return 'sys_role_user';
+        return 'sys_users_role';
     }
 
     /**

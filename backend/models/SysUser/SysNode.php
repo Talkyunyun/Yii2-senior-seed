@@ -1,11 +1,11 @@
 <?php
-namespace backend\models\AdminUser;
+namespace backend\models\SysUser;
 
 use yii\db\ActiveRecord;
 
 /**
- * Class Node 节点表
- * @package app\models\AdminUser
+ * Class SysNode 节点表
+ * @package app\models\SysUser
  * @property int $pid 父节点ID
  * @property string $name 节点名称
  * @property string $url URL地址
@@ -17,7 +17,7 @@ use yii\db\ActiveRecord;
  * @property string $font_icon 菜单字体图标
  * @author Gene <https://github.com/Talkyunyun>
  */
-class Node extends ActiveRecord {
+class SysNode extends ActiveRecord {
 
     private static $forNodes = [];
 
@@ -39,7 +39,7 @@ class Node extends ActiveRecord {
     public function attributeLabels() {
         return [
             'name' => '名称',
-            'url' => 'url地址'
+            'url'  => 'url地址'
         ];
     }
 
@@ -63,10 +63,10 @@ class Node extends ActiveRecord {
 
             $menu = $session->get('menu');
             if (empty($menu)) {
-                if (strtolower($user->username) == 'admin') {
-                    $menu = Node::getAllMenus();
+                if (strtolower($user->email) == \Yii::$app->params['sys_user_email']) {
+                    $menu = self::getAllMenus();
                 } else {
-                    $menu = Node::getUserMenus($user->id);
+                    $menu = self::getUserMenus($user->id);
                 }
 
                 $session->set('menu', $menu);
@@ -187,11 +187,11 @@ class Node extends ActiveRecord {
      */
     public static function getUserMenus($uid = 0) {
         try {
-            $query = Role::find()
-                ->from(Role::tableName() . ' a')
-                ->rightJoin(RoleUser::tableName() . ' b', 'a.id=b.role_id')
-                ->rightJoin(Access::tableName() . ' c', 'a.id=c.role_id')
-                ->leftJoin(Node::tableName() . ' d', 'c.node_id=d.id')
+            $query = SysRole::find()
+                ->from(SysRole::tableName() . ' a')
+                ->rightJoin(SysUserRole::tableName() . ' b', 'a.id=b.role_id')
+                ->rightJoin(SysPermission::tableName() . ' c', 'a.id=c.role_id')
+                ->leftJoin(SysNode::tableName() . ' d', 'c.node_id=d.id')
                 ->select('d.id, d.name text, d.url url_key, d.pid, d.font_icon')
                 ->asArray()
                 ->orderBy('d.sort desc')

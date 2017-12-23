@@ -42,7 +42,7 @@ class Clients extends ActiveRecord {
             'password'   => '密码',
             'first_name' => '名字',
             'last_name'  => '姓氏',
-            'nickname'   => '昵称'
+            'nick_name'   => '昵称'
         ];
     }
 }

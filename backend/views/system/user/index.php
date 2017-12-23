@@ -6,7 +6,7 @@
 
 use yii\helpers\Url;
 use yii\helpers\Html;
-use app\utils\DateUtil;
+
 $this->title = '管理员列表';
 ?>
 
@@ -21,20 +21,44 @@ $this->title = '管理员列表';
         </div>
         <hr>
 
+        <form class="layui-form" method="get">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">邮箱:</label>
+                    <div class="layui-input-inline">
+                        <input type="text" value="<?= $email ?>" name="email" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">状态:</label>
+                    <div class="layui-input-inline">
+                        <select name="status">
+                            <option value="all" <?= $status == 'all' ? 'selected' : '' ?> >全部</option>
+                            <option value="1" <?= $status == '1' ? 'selected' : '' ?> >正常</option>
+                            <option value="0" <?= $status == '0' ? 'selected' : '' ?> >禁用</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-inline">
+                    <button type="submit" class="btn btn-info">查询</button>
+                </div>
+            </div>
+        </form>
+        <hr>
+
         <div class="table-responsive">
             <table class="table table-striped table-hover table-bordered">
                 <thead>
                 <tr class="active">
                     <th class="text-center">#UID</th>
-                    <th class="text-center">登录名</th>
+                    <th class="text-center">登录邮箱</th>
                     <th class="text-center">姓名</th>
                     <th class="text-center">联系号码</th>
-                    <th class="text-center">联系邮箱</th>
                     <th class="text-center">生日</th>
                     <th class="text-center">角色</th>
-                    <th class="text-center">状态</th>
                     <th class="text-center">添加时间</th>
-                    <th class="text-center">更新时间</th>
+                    <th class="text-center">状态</th>
                     <th class="text-center">操作</th>
                 </tr>
                 </thead>
@@ -47,23 +71,21 @@ $this->title = '管理员列表';
                     <?php foreach ($result as $item) { ?>
                         <tr>
                             <td class="text-center"><?= Html::encode($item['id']) ?></td>
-                            <td class="text-center"><?= Html::encode($item['username']) ?></td>
+                            <td class="text-center"><?= Html::encode($item['email']) ?></td>
                             <td class="text-center"><?= Html::encode($item['real_name']) ?></td>
                             <td class="text-center"><?= Html::encode($item['phone']) ?></td>
-                            <td class="text-center"><?= Html::encode($item['email']) ?></td>
                             <td class="text-center"><?= Html::encode($item['birth_date']) ?></td>
                             <td class="text-center">
-                                <?php if ($item['username'] == 'admin') { ?>
+                                <?php if ($item['email'] == Yii::$app->params['sys_user_email']) { ?>
                                     <span>超级管理员</span>
-                                <?php } else { ?>
+                                <?php } else if (is_array($item['roles'])) { ?>
                                     <?php foreach ($item['roles'] as $r) { ?>
                                         <p><?= $r['name'] ?></p>
                                     <?php } ?>
                                 <?php } ?>
                             </td>
-                            <td class="text-center"><?= $statusList[$item['status']] ?></td>
                             <td class="text-center"><?= $item['created'] ?></td>
-                            <td class="text-center"><?= $item['updated'] ?></td>
+                            <td class="text-center"><?= $statusList[$item['status']] ?></td>
                             <td class="text-center">
                                 <a href="#"
                                    class="open_save"

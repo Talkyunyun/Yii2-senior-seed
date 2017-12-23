@@ -89,7 +89,7 @@ class LoginController extends BaseController {
             return ResponseUtil::error('非法签名');
         }
 
-        $fields = ['mobile', 'email', 'first_name', 'last_name', 'avatar_url', 'gender', 'language'];
+        $fields = ['mobile', 'email', 'nick_name', 'first_name', 'last_name', 'avatar_url', 'gender', 'language'];
         // 判断是否存在该用户
         $client = Clients::find()
             ->select($fields)
@@ -97,7 +97,7 @@ class LoginController extends BaseController {
             ->asArray()->one();
         if (empty($client)) {// 注册用户
             $model = new Clients();
-            $model->nickname = $this->data['user']['nickName'];
+            $model->nick_name = $this->data['user']['nickName'];
             $model->wechat_openid = $result['openid'];
             $model->avatar_url = $this->data['user']['avatarUrl'];
             $model->gender = $this->data['user']['gender'];

@@ -2,11 +2,11 @@
 namespace backend\controllers;
 
 use Yii;
-use common\utils\Util;
 use yii\web\Controller;
+use common\utils\Util;
 use common\utils\ResponseUtil;
-use backend\models\AdminUser\AdminUserLogin;
-use backend\models\AdminUser\AdminUserLoginLog;
+use backend\models\SysUser\SysUserLoginLogs;
+use backend\models\SysUser\SysUserLogin;
 
 /**
  * 登录控制器
@@ -48,14 +48,14 @@ class LoginController extends Controller {
             if(!$isGuest) {
                 return ResponseUtil::success('登录成功');
             }
-            $model = new AdminUserLogin();
-            $model->username = $request->post('username', false);
+            $model = new SysUserLogin();
+            $model->email = $request->post('email', false);
             $model->password = $request->post('password', false);
             if (!$model->login()) {
                 throw new \Exception(Util::getModelError($model->errors), 1001);
             }
             // 记录登录日志
-            AdminUserLoginLog::add();
+            SysUserLoginLogs::add();
 
             return ResponseUtil::success('登录成功');
         } catch (\Exception $e) {

@@ -3,8 +3,8 @@ namespace backend\models;
 
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
-use backend\models\AdminUser\Role;
-use backend\models\AdminUser\RoleUser;
+use backend\models\SysUser\SysRole;
+use backend\models\SysUser\SysUserRole;
 
 /**
  * 系统用户表
@@ -13,21 +13,20 @@ use backend\models\AdminUser\RoleUser;
  * @property string $updated 修改时间
  * @author Gene <https://github.com/Talkyunyun>
  */
-class AdminUser extends ActiveRecord implements IdentityInterface {
+class SysUser extends ActiveRecord implements IdentityInterface {
 
     // 表名
     public static function tableName() {
-        return 'sys_admin_user';
+        return 'sys_users';
     }
 
     // 规则
     public function rules() {
         return [
-            [['username', 'password', 'real_name'], 'required', 'message' => '{attribute}不能为空'],
-            ['username', 'unique', 'message' => '该用户名已经存在了'],
-            ['username', 'string', 'length' => [4, 18], 'message' => '用户名长度限制4-18个字符'],
-            ['status', 'in', 'range' => [1, 0], 'message' => '非法的状态值'],
+            [['email', 'password', 'real_name'], 'required', 'message' => '{attribute}不能为空'],
             ['email', 'email', 'message' => '非法的电子邮箱'],
+            ['email', 'unique', 'message' => '该邮箱已经存在了'],
+            ['status', 'in', 'range' => [1, 0], 'message' => '非法的状态值'],
             ['phone', 'match', 'pattern' => '/^1[3,4,5,7,8][0-9]{9}$/', 'message' => '非法的手机号码'],
             ['birth_date', 'default', 'value' => null]
         ];
@@ -36,27 +35,19 @@ class AdminUser extends ActiveRecord implements IdentityInterface {
     // 别名
     public function attributeLabels() {
         return [
-            'username' => '登录用户名',
-            'password' => '密码',
-            'real_name'=> '真实姓名'
+            'email'     => '登录邮箱',
+            'password'  => '密码',
+            'real_name' => '真实姓名',
+            'phone'     => '联系号码',
+            'birth_date'=> '生日日期'
         ];
     }
-
-    // 场景定义
-    public function scenarios() {
-        return [
-            'create' => ['username', 'password', 'real_name', 'status', 'email', 'phone', 'birth_date'],
-            'update' => ['username', 'real_name', 'status', 'email', 'phone', 'birth_date'],
-            'update_password' => ['password', 'updated']
-        ];
-    }
-
 
     // 获取用户状态值
     public static function getStatusList() {
         return [
-            1 => '生效',
-            0 => '失效'
+            1 => '正常',
+            0 => '禁用'
         ];
     }
 
@@ -77,15 +68,15 @@ class AdminUser extends ActiveRecord implements IdentityInterface {
 
 
     /**
-     * 根据登录用户名获取正常用户信息
-     * @param $userName
+     * 根据登录邮箱获取正常用户信息
+     * @param $email
      * @return bool|static
      */
-    public static function findNormalByUserName($userName) {
+    public static function findNormalByEmail($email) {
         try {
             return static::findOne([
-                'username' => $userName,
-                'status'   => 1
+                'email'  => $email,
+                'status' => 1
             ]);
         } catch (\Exception $e) {
             return false;
@@ -123,19 +114,15 @@ class AdminUser extends ActiveRecord implements IdentityInterface {
      * @return bool
      */
     public static function getUserRolesByUid($uid = 0) {
-        try {
-            $data = Role::find()
-                ->from(RoleUser::tableName() . ' a')
-                ->leftJoin(Role::tableName() . ' b', 'a.role_id=b.id')
-                ->select('b.name')
-                ->where(['a.user_id' => $uid])
-                ->asArray()
-                ->all();
+        $data = SysRole::find()
+            ->from(SysUserRole::tableName() . ' a')
+            ->leftJoin(SysRole::tableName() . ' b', 'a.role_id=b.id')
+            ->select('b.name')
+            ->where(['a.user_id' => $uid])
+            ->asArray()
+            ->all();
 
-            return $data;
-        } catch (\Exception $e) {
-            return false;
-        }
+        return $data;
     }
 
 

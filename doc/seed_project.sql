@@ -1,31 +1,35 @@
--- 数据库
+-- ================================== --
+-- ========= 项目基本表结构 ========== --
+-- ================================== --
+
+-- 数据库名称 注意utf8mb4编码
 CREATE DATABASE seed_project;
 
+
 -- 系统用户表
-CREATE TABLE sys_admin_user (
+CREATE TABLE sys_users (
     id int(11) unsigned PRIMARY KEY AUTO_INCREMENT comment '用户UID',
-    username varchar(50) not null comment '用户名',
+    email varchar(50) not null comment '登录邮箱',
     password char(60) not null comment '登录密码',
     real_name varchar(20) not null default '' comment '真实姓名',
     phone varchar(18) not null default '' comment '联系号码',
-    email varchar(30) not null default '' comment '电子邮箱',
     auth_key varchar(60) not null default '' comment 'auth_key',
     access_token varchar(60) not null default '' comment 'access_token',
-    status tinyint(1) not null default 1 comment '状态，0：禁用，1：正常',
-    birth_date DATE comment '生日日期',
+    status tinyint(1) unsigned not null default 1 comment '状态，0：禁用，1：正常',
+    birth_date DATE DEFAULT NULL comment '生日日期',
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP comment '创建时间',
     updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP comment '更新时间',
-    UNIQUE KEY username (username),
+    UNIQUE KEY email (email),
     key status(status)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COMMENT '系统用户表';
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 COMMENT '系统用户表';
 
--- 插入admin用户密码123456
-INSERT INTO `sys_admin_user` (`id`, `username`, `password`, `real_name`, `phone`, `email`, `auth_key`, `access_token`, `status`, `birth_date`, `created`, `updated`) VALUES 
-	(1,'admin','$2y$13$2TY3rdo.Y3jUoZ6O3STC4OAWDFux1Q3h5yzRqDpLYJQSjmTxt6qxK','admin','','admin@126.com','','',1,'2017-09-30','2017-09-15 15:09:18','2017-09-15 20:09:42');
+-- 插入admin@126.com用户密码123456
+INSERT INTO `sys_users` (`id`, `email`, `password`, `real_name`, `phone`, `auth_key`, `access_token`, `status`, `birth_date`, `created`, `updated`) VALUES
+	(1, 'admin@126.com', '$2y$13$2TY3rdo.Y3jUoZ6O3STC4OAWDFux1Q3h5yzRqDpLYJQSjmTxt6qxK','admin','','','',1,'2017-09-30','2017-09-15 15:09:18','2017-09-15 20:09:42');
 
 
 -- 系统用户登录日志表
-CREATE TABLE sys_admin_user_login_log (
+CREATE TABLE sys_users_login_logs (
     id bigint unsigned PRIMARY KEY AUTO_INCREMENT,
     uid int(11) unsigned not null comment '登录UID',
     ip varchar(15) not null default '' comment '登录IP',
@@ -33,14 +37,14 @@ CREATE TABLE sys_admin_user_login_log (
     url varchar(255) not null default '' comment '请求Url地址',
     client_name varchar(60) not null default '' comment '客户端名称',
     client_version varchar(60) not null default '' comment '客户端版本',
-    platform varchar(60) not null default '' comment '客户端系统',
+    client_platform varchar(60) not null default '' comment '客户端系统',
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP comment '登录时间',
     key uid (uid)
-) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 comment '系统用户登录日志表';
+) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8mb4 comment '系统用户登录日志表';
 
 
 -- 权限表
-CREATE TABLE sys_access (
+CREATE TABLE sys_permission (
     role_id int(11) unsigned not null comment '角色ID',
     node_id int(11) unsigned not null comment '节点ID,sys_node中的ID',
     KEY role_id (role_id),
@@ -53,8 +57,8 @@ CREATE TABLE sys_node (
     pid int(11) unsigned not null default 0 comment '父级ID,0:顶级节点',
     name varchar(100) not null comment '操作名称，或菜单名',
     url varchar(255) not null default '' comment 'url地址',
-    status tinyint(1) not null default 1 comment '状态,1正常  0禁用',
-    is_menu tinyint(1) not null default 0 comment '是否是菜单，0：否，1：是',
+    status tinyint(1) unsigned not null default 1 comment '状态,1正常  0禁用',
+    is_menu tinyint(1) unsigned not null default 0 comment '是否是菜单，0：否，1：是',
     level tinyint(1) unsigned not null default 1 comment '等级',
     can_del tinyint(1) unsigned not null default 1 comment '是否可以删除，0：不可以，1：可以',
     sort int(11) unsigned null default 0 comment '排序',
@@ -88,12 +92,12 @@ INSERT INTO `sys_role` (`id`, `name`, `status`, `remark`) VALUES
 
 
 -- 用户角色表
-CREATE TABLE sys_role_user (
+CREATE TABLE sys_users_role (
     role_id int(11) unsigned default 0 comment '角色ID，对应sys_role表主键',
-    user_id int(11) default 0 comment '用户ID',
+    user_id int(11) unsigned default 0 comment '用户ID',
     KEY role_id (role_id),
     KEY user_id (user_id)
-) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT '用户角色表';
+) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8 COMMENT '系统用户角色表';
 
 
 

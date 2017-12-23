@@ -1,7 +1,7 @@
 <?php
 namespace backend\controllers;
 
-use backend\models\AdminUser\Node;
+use backend\models\SysUser\SysNode;
 
 /**
  * 首页控制器
@@ -25,7 +25,7 @@ class SiteController extends BaseController {
         $this->layout = false;
 
         return $this->render('main', [
-            'menu' => Node::getMenus()
+            'menu' => SysNode::getMenus()
         ]);
     }
 }

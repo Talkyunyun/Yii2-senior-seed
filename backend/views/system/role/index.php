@@ -42,20 +42,7 @@ $this->title = '角色列表';
                             <td class="text-center"><?= Html::encode($item['id']) ?></td>
                             <td class="text-center"><?= Html::encode($item['name']) ?></td>
                             <td class="text-center"><?= Html::encode($item['remark']) ?></td>
-                            <td class="text-center">
-                                <form class="layui-form">
-                                    <input type="checkbox"
-                                           lay-skin="switch"
-                                           lay-filter="statusOn"
-                                            <?php
-                                                if ($item['status'] == 1) {
-                                                    echo 'checked';
-                                                }
-                                            ?>
-                                           value="<?= $item['id'] ?>"
-                                           lay-filter="switchTest" lay-text="正常|禁用">
-                                </form>
-                            </td>
+                            <td class="text-center"><?= $statusList[$item['status']] ?></td>
                             <td class="text-center">
                                 <a href="#"
                                    class="open_save"
@@ -126,21 +113,5 @@ $this->title = '角色列表';
                 });
             }, function(){});
         });
-
-        setTimeout(function() {
-            console.log(app.form)
-            app.form.on('switch(statusOn)', function(data){
-                app.post("<?= Url::toRoute('/system/role/on-off') ?>", {
-                    id : data.value
-                }, function(res) {
-                    if (res == 1) {
-                        app.showMsg('设置成功');
-                        window.location.reload();
-                    } else {
-                        app.showMsg('设置失败', 'error');
-                    }
-                });
-            });
-        }, 1000);
     });
 </script>

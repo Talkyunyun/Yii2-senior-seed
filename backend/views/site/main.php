@@ -63,7 +63,7 @@ $version = Yii::$app->params['version'];
                     <div class="logo-element">AFD</div>
                 </li>
 
-                <?= $this->render('menu', ['menu' => $menu]) ?>
+                <?= $menu ? $this->render('menu', ['menu' => $menu]) : '' ?>
             </ul>
         </div>
     </nav>

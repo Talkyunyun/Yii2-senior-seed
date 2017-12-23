@@ -40,7 +40,7 @@ $version = Yii::$app->params['version'];
         <div class="col-sm-5">
             <form>
                 <h4 class="no-margins"><?= $this->title ?></h4>
-                <input type="text" id="username" class="form-control uname" placeholder="用户名" />
+                <input type="email" id="email" class="form-control uname" placeholder="登录邮箱" />
                 <input type="password" id="password" class="form-control pword m-b" placeholder="密码" />
                 <button type="button" id="login_btn" class="btn btn-success btn-block">登录</button>
             </form>
@@ -63,13 +63,13 @@ $version = Yii::$app->params['version'];
         $(document).keypress(function(e) {
             if (e.keyCode == 13) $('#login_btn').click();
         });
-        $('#username').focus();
+        $('#email').focus();
         $('#login_btn').click(function() {
-            var uname = $('#username');
+            var email = $('#email');
             var upass = $('#password');
 
-            if (!uname.val()) {
-                uname.focus();
+            if (!email.val()) {
+                email.focus();
                 layer.msg('请输入用户名');
                 return false;
             }
@@ -85,9 +85,9 @@ $version = Yii::$app->params['version'];
                 type : 'POST',
                 url  : "<?= Url::toRoute('/login/do') ?>" ,
                 data : {
-                    username : uname.val(),
+                    email    : email.val(),
                     password : upass.val(),
-                    token : "<?= Yii::$app->request->csrfToken ?>"
+                    token    : "<?= Yii::$app->request->csrfToken ?>"
                 },
                 success : function(res) {
                     layer.close(loading);
