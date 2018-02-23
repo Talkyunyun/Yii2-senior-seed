@@ -1,11 +1,11 @@
 <?php
-namespace website\controllers;
+namespace home\controllers;
 
 
 /**
  * 首页控制器
  * Class SiteController
- * @package website\controllers
+ * @package home\controllers
  * @author Gene <https://github.com/Talkyunyun>
  */
 class SiteController extends BaseController {

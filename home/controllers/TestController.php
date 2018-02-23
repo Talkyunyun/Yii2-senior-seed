@@ -1,5 +1,5 @@
 <?php
-namespace website\controllers;
+namespace home\controllers;
 
 
 class TestController extends BaseController {

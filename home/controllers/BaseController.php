@@ -1,12 +1,12 @@
 <?php
-namespace website\controllers;
+namespace home\controllers;
 
 use yii\web\Controller;
 
 /**
  * 基类
  * Class BaseController
- * @package website\controllers
+ * @package home\controllers
  */
 class BaseController extends Controller {
 

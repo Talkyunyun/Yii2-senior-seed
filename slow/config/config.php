@@ -13,6 +13,11 @@ $config = [
     'bootstrap' => ['log'],
     'controllerNamespace' => 'slow\controllers',
 
+    'params' => array_merge(
+        require_once ROOT_PATH . '/common/config/params.php',
+        require_once __DIR__ . '/params.php'
+    ),
+
     // 公共组件
     'components' => [
         'request' => [
@@ -36,6 +41,8 @@ $config = [
             'showScriptName'  => false,
             'rules' => require_once __DIR__ . '/routes.php'
         ],
+        'redis' => (require_once ROOT_PATH . '/common/config/redis.php')[YII_ENV],
+        'db' => (require_once ROOT_PATH . '/common/config/db.php')[YII_ENV],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
@@ -49,27 +56,5 @@ $config = [
         ]
     ]
 ];
-
-// 合并params参数配置
-$config['params'] = \yii\helpers\ArrayHelper::merge(
-    require(__DIR__ . '/../../common/config/params.php'),
-    require(__DIR__ . '/params.php')
-);
-
-// 加载对应环境配置文件
-$envConfig = require_once __DIR__ . '/../../common/config/config-' . YII_ENV . '.php';
-
-// 合并配置
-$config['params']     = array_merge($config['params'], $envConfig['params']);
-$config['components'] = array_merge($config['components'], $envConfig['components']);
-
-
-// 只有正式环境才会显示友好的错误页面
-if (!YII_DEBUG) {
-    $config['components']['errorHandler'] = [
-        'errorAction' => 'error/show'
-    ];
-}
-
 
 return $config;

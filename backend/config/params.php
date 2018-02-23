@@ -8,7 +8,12 @@ return [
     'version'       => 'v1.0.0',
     'app_name'      => '后台应用系统',
     'app_describe'  => '系统描述',
-    'app_url'       => 'http://backend.seed.com',
+
+
+    'app_url' => [
+        ENV_DEV => 'http://backend.seed.com',
+        ENV_PRD => 'http://backend.seed.com'
+    ],
 
 
     'sys_user_email'=> 'admin@126.com'
